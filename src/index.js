@@ -1,13 +1,13 @@
 import axios from 'axios';
 import SlimSelect from 'slim-select';
 
-new SlimSelect({
-  select: '#selectElement',
+const selectElement = new SlimSelect({
+  select: '#breed-select-1', // Вкажіть відповідний id для вашого елементу select
 });
+
 axios.defaults.headers.common['x-api-key'] =
   'live_bsD0tmcbjEWlwMpwXS3uyJjVIxpNF9BJ2jHR16mTBeJPml6nkCfJDB09Ug6pHttz';
 
-const breedSelect = document.querySelector('.breed-select');
 const loader = document.querySelector('.loader');
 const error = document.querySelector('.error');
 const catInfo = document.querySelector('.cat-info');
@@ -38,130 +38,45 @@ function displayBreeds(breeds) {
     const option = document.createElement('option');
     option.value = breed.id;
     option.textContent = breed.name;
-    breedSelect.appendChild(option);
+    selectElement.data.appendChild(option);
   });
 }
 
 function displayCatInfo(cat) {
   catInfo.innerHTML = `
     <img src="${cat.url}" alt="Cat Image" />
-    <p><strong style="color: red">Breed:</strong> ${cat.breeds[0].name}</p>
-    <p><strong>Description:</strong> ${cat.breeds[0].description}</p>
-    <p><strong>Temperament:</strong> ${cat.breeds[0].temperament}</p>
+    <p><strong style="color: red;">Breed:</strong> ${cat.breeds[0].name}</p>
+    <p><strong style="color: red;">Description:</strong> ${cat.breeds[0].description}</p>
+    <p><strong style="color: red;">Temperament:</strong> ${cat.breeds[0].temperament}</p>
   `;
 }
 
 async function loadBreeds() {
   try {
     loader.style.display = 'block';
+    selectElement.slim.data.innerHTML = '';
     const breeds = await fetchBreeds();
     displayBreeds(breeds);
     loader.style.display = 'none';
   } catch (error) {
     loader.style.display = 'none';
     error.style.display = 'block';
-  }
-}
-
-breedSelect.addEventListener('change', async event => {
-  const selectedBreedId = event.target.value;
-
-  try {
-    const catInfoData = await fetchCatByBreed(selectedBreedId);
-    displayCatInfo(catInfoData[0]);
-  } catch (error) {
     console.error(error);
   }
-});
-
-window.addEventListener('DOMContentLoaded', loadBreeds);
-
-function showLoader(element) {
-  element.style.display = 'block';
 }
 
-function hideLoader(element) {
-  element.style.display = 'none';
-}
-
-async function loadBreeds() {
+selectElement.slim.on('change', async () => {
+  const selectedBreedId = selectElement.selected();
   try {
-    showLoader(loader);
-    breedSelect.style.display = 'none';
-
-    const breeds = await fetchBreeds();
-    displayBreeds(breeds);
-
-    hideLoader(loader);
-    breedSelect.style.display = 'block';
+    catInfo.style.display = 'none';
+    loader.style.display = 'block';
+    const catInfoData = await fetchCatByBreed(selectedBreedId);
+    displayCatInfo(catInfoData[0]);
+    loader.style.display = 'none';
+    catInfo.style.display = 'block';
   } catch (error) {
-    hideLoader(loader);
+    loader.style.display = 'none';
     error.style.display = 'block';
-  }
-}
-
-breedSelect.addEventListener('change', async event => {
-  const selectedBreedId = event.target.value;
-
-  try {
-    showLoader(loader);
-    catInfo.style.display = 'none';
-
-    const catInfoData = await fetchCatByBreed(selectedBreedId);
-    displayCatInfo(catInfoData[0]);
-
-    hideLoader(loader);
-    catInfo.style.display = 'block';
-  } catch (error) {
-    hideLoader(loader);
-    console.error(error);
-  }
-});
-
-window.addEventListener('DOMContentLoaded', loadBreeds);
-
-function showErrorMessage() {
-  error.style.display = 'block';
-}
-
-function hideErrorMessage() {
-  error.style.display = 'none';
-}
-
-async function loadBreeds() {
-  try {
-    showLoader(loader);
-    breedSelect.style.display = 'none';
-    hideErrorMessage();
-
-    const breeds = await fetchBreeds();
-    displayBreeds(breeds);
-
-    hideLoader(loader);
-    breedSelect.style.display = 'block';
-  } catch (error) {
-    hideLoader(loader);
-    showErrorMessage();
-    console.error(error);
-  }
-}
-
-breedSelect.addEventListener('change', async event => {
-  const selectedBreedId = event.target.value;
-
-  try {
-    showLoader(loader);
-    catInfo.style.display = 'none';
-    hideErrorMessage();
-
-    const catInfoData = await fetchCatByBreed(selectedBreedId);
-    displayCatInfo(catInfoData[0]);
-
-    hideLoader(loader);
-    catInfo.style.display = 'block';
-  } catch (error) {
-    hideLoader(loader);
-    showErrorMessage();
     console.error(error);
   }
 });
