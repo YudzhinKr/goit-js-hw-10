@@ -1,9 +1,4 @@
 import axios from 'axios';
-import SlimSelect from 'slim-select';
-
-const selectElement = new SlimSelect({
-  select: '#breed-select', // Вкажіть відповідний id для вашого елементу select
-});
 
 axios.defaults.headers.common['x-api-key'] =
   'live_bsD0tmcbjEWlwMpwXS3uyJjVIxpNF9BJ2jHR16mTBeJPml6nkCfJDB09Ug6pHttz';
