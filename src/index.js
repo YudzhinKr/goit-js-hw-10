@@ -46,31 +46,6 @@ function displayCatInfo(cat) {
   `;
 }
 
-async function loadBreeds() {
-  try {
-    loader.style.display = 'block';
-    const breeds = await fetchBreeds();
-    displayBreeds(breeds);
-    loader.style.display = 'none';
-  } catch (error) {
-    loader.style.display = 'none';
-    error.style.display = 'block';
-  }
-}
-
-breedSelect.addEventListener('change', async event => {
-  const selectedBreedId = event.target.value;
-
-  try {
-    const catInfoData = await fetchCatByBreed(selectedBreedId);
-    displayCatInfo(catInfoData[0]);
-  } catch (error) {
-    console.error(error);
-  }
-});
-
-window.addEventListener('DOMContentLoaded', loadBreeds);
-
 function showLoader(element) {
   element.style.display = 'block';
 }
@@ -78,42 +53,6 @@ function showLoader(element) {
 function hideLoader(element) {
   element.style.display = 'none';
 }
-
-async function loadBreeds() {
-  try {
-    showLoader(loader);
-    breedSelect.style.display = 'none';
-
-    const breeds = await fetchBreeds();
-    displayBreeds(breeds);
-
-    hideLoader(loader);
-    breedSelect.style.display = 'block';
-  } catch (error) {
-    hideLoader(loader);
-    error.style.display = 'block';
-  }
-}
-
-breedSelect.addEventListener('change', async event => {
-  const selectedBreedId = event.target.value;
-
-  try {
-    showLoader(loader);
-    catInfo.style.display = 'none';
-
-    const catInfoData = await fetchCatByBreed(selectedBreedId);
-    displayCatInfo(catInfoData[0]);
-
-    hideLoader(loader);
-    catInfo.style.display = 'block';
-  } catch (error) {
-    hideLoader(loader);
-    console.error(error);
-  }
-});
-
-window.addEventListener('DOMContentLoaded', loadBreeds);
 
 function showErrorMessage() {
   error.style.display = 'block';
@@ -161,4 +100,4 @@ breedSelect.addEventListener('change', async event => {
   }
 });
 
-window.addEventListener('DOMContentLoaded', loadBreeds);
+window.addEventListener('DOMContentLoaded', () => loadBreeds());
