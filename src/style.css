@@ -1,4 +1,4 @@
-.breed-select-1 {
+/* .breed-select-1 {
   display: block;
   width: 300px;
   padding: 10px;
@@ -6,14 +6,27 @@
   border-radius: 10px;
   background-color: teal;
   cursor: pointer;
+
+  transition: background-color 0.3s ease;
+}
+
+.breed-select-1:hover {
+  background-color: darkcyan;
 }
 
 div {
   width: 500px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid teal;
+  border-radius: 10px;
 }
 
 img {
   margin-top: 20px;
   width: 100%;
-  height: 500px;
-}
+  max-height: 500px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+} */
